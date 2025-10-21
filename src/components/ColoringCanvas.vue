@@ -39,12 +39,12 @@
         class="shadow bg-white"></svg>
     </div>
   </div>
-
+  <UpdateBox />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-
+import UpdateBox from './UpdateBox.vue'
 import firstDay from '../assets/first_day.svg?raw'
 import froheWeihnachten from '../assets/frohe_weihnachten_2.svg?raw'
 import happyBirthday from '../assets/happy_birthday.svg?raw'
