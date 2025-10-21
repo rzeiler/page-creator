@@ -94,7 +94,7 @@ async function save() {
 
 async function load() {
   const content = await openFile()
-  if (content) svgRef.value = content
+  if (content) loadSvgElement(content)
 }
 
 function undoAction() {
@@ -106,26 +106,22 @@ function redoAction() {
 }
 
 function loadSvgElement(svgRaw) {
+  svgRef.value.innerHTML = "";
   const parser = new DOMParser()
   const svg = parser.parseFromString(svgRaw, 'image/svg+xml').documentElement
-  const group = document.createElementNS('http://www.w3.org/2000/svg', 'g')
 
   // 2. Alle <g> mit allowDrag="true" auswählen
-  const allowedGroups = svg.querySelectorAll('g[allowDrag="true"]')
+  const allowedGroups = svg.querySelectorAll('g[allowDrag="true"],g[allowdrag="true"]')
 
   // 3. In Ziel-SVG einfügen
   allowedGroups.forEach(group => {
-
-    const root = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-    root.appendChild(group)
-
-    // optional: cloneNode(true), um sicher zu gehen, dass das Original nicht verändert wird
-    svgRef.value.appendChild(root.cloneNode(true))
+    svgRef.value.appendChild(group)
   })
 
-  svgRef.value.appendChild(group)
+  setTimeout(() => {
+    recordAction(svgRef.value.innerHTML);
+  }, 500);
 }
-
 
 onMounted(() => {
   svgRef.value.innerHTML = "";
@@ -146,14 +142,10 @@ onMounted(() => {
 
   })
 
-
-
   window.addEventListener('historyChange', (data) => {
     canUndoRef.value = canUndo()
     canRedoRef.value = canRedo()
-    console.log(data);
   })
-
 
   loadHistory()
   svgRef.value.innerHTML = lastPositions()
