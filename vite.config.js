@@ -17,6 +17,7 @@ export default defineConfig({
       ],
       manifest: {
         name: "PAGE CREATOR",
+        id: "/page-creator/",
         short_name: "P-C",
         description: "Vorlagendruck",
         theme_color: "#ffffff",
